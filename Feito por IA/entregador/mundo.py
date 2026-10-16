@@ -29,12 +29,9 @@ Toda ação custa ``CUSTO_BASE`` (1). Quando a ação é executada em uma
 célula de pedágio, o custo real é ``custo + CUSTO_PEDAGIO`` (total 3).
 Para as ações de movimento, considera-se que a ação é executada na
 célula em que o agente passa a estar após o movimento; para ``PEGAR``
-e ``ENTREGAR``, na célula atual do agente.
-
-Se o agente tenta mover-se para fora do grid ou para cima de um
-obstáculo, a consequência é permanecer na mesma célula. Como isso
-nunca pode fazer parte de um plano ótimo, tais ações simplesmente não
-são geradas como sucessoras.
+e ``ENTREGAR``, na célula atual do agente. Quando um movimento encontra
+a borda ou um obstáculo, o agente permanece na mesma célula e a ação
+continua tendo o custo correspondente à célula atual.
 """
 
 from __future__ import annotations
@@ -196,19 +193,24 @@ class MundoGrid:
         """Ações aplicáveis em ``estado``, com o estado e o custo delas.
 
         Cada item da lista é ``(ação, estado_resultante, custo)``.
-        Movimentos que bateriam na borda ou em um obstáculo não são
-        gerados (a consequência seria ficar parado, o que nunca é útil).
+        Movimentos que bateriam na borda ou em um obstáculo são gerados
+        como ações que mantêm o agente na mesma célula, conforme o
+        enunciado. A busca continua ótima porque não aceita um estado
+        repetido com custo menor.
         """
         agente, pacote, carregando = estado
         acoes: List[Tuple[str, Estado, float]] = []
 
         for nome, (di, dj) in DESLOCAMENTOS.items():
             destino = (agente[0] + di, agente[1] + dj)
-            if not self.dentro(destino) or destino in self.obstaculos:
-                continue
-            custo = self.custo_na_celula(destino)
-            pacote_novo = destino if carregando else pacote
-            acoes.append((nome, (destino, pacote_novo, carregando), custo))
+            if self.dentro(destino) and destino not in self.obstaculos:
+                celula_resultante = destino
+                custo = self.custo_na_celula(destino)
+            else:
+                celula_resultante = agente
+                custo = self.custo_na_celula(agente)
+            pacote_novo = celula_resultante if carregando else pacote
+            acoes.append((nome, (celula_resultante, pacote_novo, carregando), custo))
 
         if not carregando and agente == pacote:
             acoes.append(("PEGAR", (agente, pacote, True), self.custo_na_celula(agente)))

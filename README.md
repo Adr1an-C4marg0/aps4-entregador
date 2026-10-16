@@ -37,7 +37,7 @@ explicitamente (na interface e no modo texto).
 ### Interface gráfica
 
 ```
-python main.py
+python "Feito por IA/main.py"
 ```
 
 Na janela é possível:
@@ -70,7 +70,7 @@ Na janela é possível:
 ### Modo texto (útil para depuração e exemplos)
 
 ```
-python main.py --cli -n 10 -s ia2026
+python "Feito por IA/main.py" --cli -n 10 -s ia2026
 ```
 
 Imprime o desenho ASCII do mundo, o plano ótimo (resumido e detalhado,
@@ -79,7 +79,7 @@ com o custo de cada ação) e retorna código 1 quando não há solução.
 ### Testes
 
 ```
-python -m pytest tests -q
+python -m pytest "Feito por IA/tests" -q
 ```
 
 Os testes verificam: geração válida/reproduzível de mundos, custo de
@@ -91,19 +91,21 @@ uniforme) em vários mundos aleatórios.
 
 ```
 aps-entregador/
-├── main.py                     # ponto de entrada (GUI ou --cli)
-├── entregador/
-│   ├── __init__.py
-│   ├── mundo.py                # modelo: MundoGrid, estado, sucessores, custos
-│   ├── busca.py                # A* (ótimo), UCS e simulador do plano
-│   ├── interface.py            # interface gráfica Tkinter
-│   └── cli.py                  # execução em linha de comando
-├── tests/
-│   ├── test_mundo.py           # testes da modelagem
-│   └── test_busca.py           # testes da busca e da otimalidade
-└── docs/
-    ├── modelagem.md            # documentação da solução
-    └── exemplos.md             # exemplos de execução (com e sem solução)
+├── README.md
+└── Feito por IA/
+    ├── main.py                 # ponto de entrada (GUI ou --cli)
+    ├── entregador/
+    │   ├── __init__.py
+    │   ├── mundo.py            # modelo: MundoGrid, estado, sucessores, custos
+    │   ├── busca.py            # A* (ótimo), UCS e simulador do plano
+    │   ├── interface.py        # interface gráfica Tkinter
+    │   └── cli.py              # execução em linha de comando
+    ├── tests/
+    │   ├── test_mundo.py       # testes da modelagem
+    │   └── test_busca.py       # testes da busca e da otimalidade
+    └── docs/
+        ├── modelagem.md        # documentação da solução
+        └── exemplos.md         # exemplos de execução (com e sem solução)
 ```
 
 ## Resumo da solução
@@ -120,5 +122,5 @@ aps-entregador/
   inacessível (obstáculos isolam regiões do grid).
 
 Detalhes, justificativas e complexidade em
-[docs/modelagem.md](docs/modelagem.md); saídas reais de execução em
-[docs/exemplos.md](docs/exemplos.md).
+[docs/modelagem.md](<Feito por IA/docs/modelagem.md>); saídas reais de execução em
+[docs/exemplos.md](<Feito por IA/docs/exemplos.md>).

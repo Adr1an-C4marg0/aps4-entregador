@@ -19,10 +19,9 @@
 - **Custo**: toda ação custa 1. Se a ação é executada em uma célula de
   pedágio, o custo real é `custo + 2` (ou seja, 3).
 - **Obstáculo/borda**: mover-se para fora do grid ou contra um
-  obstáculo tem como consequência permanecer na mesma célula. Como isso
-  nunca reduz o custo de um plano ótimo, essas ações não são geradas
-  pela função sucessora (o espaço de busca fica menor sem perder
-  soluções).
+  obstáculo tem como consequência permanecer na mesma célula. A ação
+  ainda é representada pelos sucessores e recebe o custo da célula
+  atual, exatamente como descrito no enunciado.
 
 ### 1.1 Estado
 
@@ -44,7 +43,8 @@ A partir de `(agente, pacote, carregando)`:
 - **Movimentos** (CIMA/BAIXO/ESQUERDA/DIREITA): se a célula de destino
   está dentro do grid e não é obstáculo, gera
   `(nova_célula, nova_célula se carregando senão pacote, carregando)`
-  com custo `1 (+2 se a célula de destino é pedágio)`.
+  com custo `1 (+2 se a célula de destino é pedágio)`. Caso contrário,
+  gera o próprio estado, com custo `1 (+2 se a célula atual é pedágio)`.
 - **PEGAR**: aplicável se `não carregando` e `agente == pacote`;
   resultado: `(agente, pacote, True)`, custo `1 (+2 se a célula atual
   é pedágio)`.
@@ -191,9 +191,9 @@ custo realmente pago.
    aplicado à célula em que o agente passa a estar (para PEGAR e
    ENTREGAR, a célula atual). O enunciado não fixa o detalhe; a escolha
    é uniforme para todas as ações.
-2. **Movimentos inúteis não são gerados**: bater na borda ou no
-   obstáculo deixaria o agente parado pagando custo — nunca ocorre em
-   plano ótimo.
+2. **Movimentos inválidos são modelados**: bater na borda ou no
+   obstáculo deixa o agente parado e cobra o custo da ação, conforme o
+   enunciado. A busca descarta automaticamente repetições mais caras.
 3. **ENTREGAR só sobre o destino**: deixar o pacote em outra célula
    nunca ajuda a atingir o objetivo, então essa ação só é gerada na
    célula de destino (reduz o espaço de busca sem perder otimalidade).

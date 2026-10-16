@@ -53,13 +53,13 @@ def test_mundos_gerados_sao_validos(dimensao):
         assert not (mundo.obstaculos & {mundo.agente, mundo.pacote, mundo.destino})
 
 
-def test_sucessores_excluem_movimentos_para_borda_e_obstaculo():
+def test_movimentos_na_borda_ou_obstaculo_mantem_agente_parado():
     mundo = MundoGrid(3, {(0, 1)}, set(), (0, 0), (0, 2), (2, 0))
-    acoes = {acao for acao, _, _ in mundo.sucessores(mundo.estado_inicial())}
-    assert "DIREITA" not in acoes  # obstáculo em (0, 1)
-    assert "CIMA" not in acoes      # borda do grid
-    assert "ESQUERDA" not in acoes  # borda do grid
-    assert acoes == {"BAIXO"}       # PEGAR também não: agente não está no pacote
+    sucessores = {acao: novo for acao, novo, _ in mundo.sucessores(mundo.estado_inicial())}
+    assert sucessores["DIREITA"] == mundo.estado_inicial()  # obstáculo em (0, 1)
+    assert sucessores["CIMA"] == mundo.estado_inicial()      # borda do grid
+    assert sucessores["ESQUERDA"] == mundo.estado_inicial()  # borda do grid
+    assert sucessores["BAIXO"][0] == (1, 0)
 
 
 def test_custo_com_pedagio():
