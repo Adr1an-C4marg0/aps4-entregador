@@ -1,4 +1,4 @@
-#Como executar
+# Como executar
 
 Requisitos: Python 3.6 ou superior. Não precisa instalar nenhuma biblioteca.
 ```
